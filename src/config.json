@@ -1,0 +1,6 @@
+{
+    "authentication": {
+        "access_token_expirity_seconds": 300,
+        "refresh_token_expirity_seconds": 1500
+    }
+}
