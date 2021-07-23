@@ -63,9 +63,22 @@ describe('Octupus Health home assigment tests', () => {
         });
 
         test('Update Password - should return updated password', async () => {
+            // Create password:
+            const createRequest = {
+                url: 'http://localhost:3000/api/passwords',
+                body: {
+                    service: 'new2-service',
+                    password: '123'
+                },
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }
+
+            const createRes = await axios.post(createRequest.url, createRequest.body, { headers: createRequest.headers })
             // Update password:
             const updateRequest = {
-                url: 'http://localhost:3000/api/passwords/my-service',
+                url: 'http://localhost:3000/api/passwords/new2-service',
                 body: {
                     password: 'new-password'
                 },
@@ -74,33 +87,47 @@ describe('Octupus Health home assigment tests', () => {
                 }
             }
 
-            const createRes = await axios.patch(updateRequest.url, updateRequest.body, { headers: updateRequest.headers })
+            const updateres = await axios.patch(updateRequest.url, updateRequest.body, { headers: updateRequest.headers })
 
             // Get new password
             const getPasswordRequest = {
-                url: 'http://localhost:3000/api/passwords/my-service',
+                url: 'http://localhost:3000/api/passwords/new2-service',
                 headers: { headers: { 'Authorization': `Bearer ${accessToken}` } }
             }
 
             const res = await axios.get(getPasswordRequest.url, getPasswordRequest.headers)
             const password = res.data.data.password;
 
-            expect(password.service).toBe('my-service');
+            expect(password.service).toBe('new2-service');
             expect(password.password).toBe('new-password');
         });
 
         test('Delete Password - should return 400 response after delete', async () => {
             try {
+                // Create password:
+            const createRequest = {
+                url: 'http://localhost:3000/api/passwords',
+                body: {
+                    service: 'new3-service',
+                    password: '123'
+                },
+                headers: {
+                    'Authorization': `Bearer ${accessToken}`
+                }
+            }
+
+            const createRes = await axios.post(createRequest.url, createRequest.body, { headers: createRequest.headers })
+
                 // Delete Password
                 const deleteRequest = {
-                    url: 'http://localhost:3000/api/passwords/my-service',
+                    url: 'http://localhost:3000/api/passwords/new3-service',
                     headers: { headers: { 'Authorization': `Bearer ${accessToken}` } }
                 }
 
                 const deleteRes = await axios.delete(deleteRequest.url, deleteRequest.headers)
                 // Get deleted Password
                 const getPasswordRequest = {
-                    url: 'http://localhost:3000/api/passwords/my-service',
+                    url: 'http://localhost:3000/api/passwords/new3-service',
                     headers: { headers: { 'Authorization': `Bearer ${accessToken}` } }
                 }
 
